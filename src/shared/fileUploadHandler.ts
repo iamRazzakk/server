@@ -1,5 +1,5 @@
 import { RequestHandler } from "express";
-import { getUploadFields } from "../app/middlewares/fileUploaderHandelar";
+import { getUploadFields } from "../app/middlewares/fileUploaderHandlar";
 
 export const fileUploadHandler = (): RequestHandler => {
   return (req, res, next) => {

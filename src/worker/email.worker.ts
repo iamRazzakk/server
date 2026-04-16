@@ -21,6 +21,7 @@ const worker = new Worker(
   },
 );
 
+
 worker.on("ready", () => {
   console.log("✅ Email worker is ready to process jobs");
 });

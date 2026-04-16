@@ -63,9 +63,9 @@ const storage = multer.diskStorage({
       return cb(
         new ApiError(
           StatusCodes.BAD_REQUEST,
-          `Unsupported field: ${file.fieldname}`
+          `Unsupported field: ${file.fieldname}`,
         ),
-        ""
+        "",
       );
     }
 
@@ -85,15 +85,15 @@ const storage = multer.diskStorage({
 const fileFilter = (
   _req: Request,
   file: Express.Multer.File,
-  cb: FileFilterCallback
+  cb: FileFilterCallback,
 ) => {
   const config = UPLOAD_CONFIG[file.fieldname];
   if (!config) {
     return cb(
       new ApiError(
         StatusCodes.BAD_REQUEST,
-        `Unsupported field: ${file.fieldname}`
-      )
+        `Unsupported field: ${file.fieldname}`,
+      ),
     );
   }
 
@@ -103,8 +103,8 @@ const fileFilter = (
         StatusCodes.BAD_REQUEST,
         `Invalid file type for ${
           file.fieldname
-        }. Allowed: ${config.allowedMimeTypes.join(", ")}`
-      )
+        }. Allowed: ${config.allowedMimeTypes.join(", ")}`,
+      ),
     );
   }
 
@@ -126,7 +126,7 @@ export const getUploadFields = () => {
     Object.keys(UPLOAD_CONFIG).map((field) => ({
       name: field,
       maxCount: UPLOAD_CONFIG[field].maxCount,
-    }))
+    })),
   );
 };
 
@@ -135,7 +135,7 @@ type IFolderName = keyof typeof UPLOAD_CONFIG;
 
 export const getSingleFilePath = (
   files: Record<string, Express.Multer.File[]>,
-  folder: IFolderName
+  folder: IFolderName,
 ) => {
   const fieldFiles = files?.[folder];
   if (fieldFiles && fieldFiles.length > 0) {
@@ -146,12 +146,12 @@ export const getSingleFilePath = (
 
 export const getMultipleFilesPath = (
   files: Record<string, Express.Multer.File[]>,
-  folder: IFolderName
+  folder: IFolderName,
 ) => {
   const fieldFiles = files?.[folder];
   if (fieldFiles && Array.isArray(fieldFiles)) {
     return fieldFiles.map(
-      (file) => `/${UPLOAD_CONFIG[folder].folder}/${file.filename}`
+      (file) => `/${UPLOAD_CONFIG[folder].folder}/${file.filename}`,
     );
   }
   return undefined;

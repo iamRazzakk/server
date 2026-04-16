@@ -7,21 +7,20 @@ import validateRequest from "../../middlewares/validateRequest";
 import {
   getSingleFilePath,
   getUploadFields,
-} from "../../middlewares/fileUploaderHandelar";
+} from "../../middlewares/fileUploaderHandlar";
 
 const router = express.Router();
 
 router.get(
   "/profile",
   auth(USER_ROLES.ADMIN, USER_ROLES.USER),
-  UserController.getUserProfile
+  UserController.getUserProfile,
 );
-
 
 router.post(
   "/create-admin",
   validateRequest(UserValidation.createAdminZodSchema),
-  UserController.createAdmin
+  UserController.createAdmin,
 );
 
 router
@@ -29,7 +28,7 @@ router
   .post(
     getUploadFields(),
     validateRequest(UserValidation.createUserZodSchema),
-    UserController.createUser
+    UserController.createUser,
   )
   .patch(
     auth(USER_ROLES.ADMIN, USER_ROLES.USER),
@@ -39,7 +38,7 @@ router
         const data = req.body;
         const profilePath = getSingleFilePath(
           req.files as Record<string, Express.Multer.File[]>,
-          "image"
+          "image",
         );
         if (profilePath) {
           data.profile = profilePath;
@@ -50,7 +49,7 @@ router
         next(error);
       }
     },
-    UserController.updateProfile
+    UserController.updateProfile,
   );
 
 export const UserRoutes = router;

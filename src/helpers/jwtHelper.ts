@@ -2,7 +2,6 @@ import jwt from "jsonwebtoken";
 import config from "../config";
 import crypto from "crypto";
 
-
 // Access Token create
 const createAccessToken = (user: { id: string; role: string }) => {
   // @ts-ignore
@@ -13,13 +12,13 @@ const createAccessToken = (user: { id: string; role: string }) => {
       iss: config.jwt.issuer,
       aud: config.jwt.audience,
       tokenVersion: config.jwt.tokenVersion,
-      jti: crypto.randomUUID()
+      jti: crypto.randomUUID(),
     },
     config.jwt.secret,
     {
       expiresIn: config.jwt.accessExpiresIn,
       algorithm: "HS256" as const,
-    }
+    },
   );
 };
 
@@ -36,7 +35,7 @@ const createRefreshToken = (userId: string) => {
     config.jwt.refreshSecret,
     {
       expiresIn: config.jwt.refreshExpiresIn,
-    }
+    },
   );
 };
 

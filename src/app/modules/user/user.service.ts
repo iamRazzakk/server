@@ -23,7 +23,7 @@ const createAdminToDB = async (payload: any): Promise<IUser> => {
     await User.findByIdAndUpdate(
       { _id: createAdmin?._id },
       { verified: true },
-      { new: true }
+      { new: true },
     );
   }
 
@@ -55,14 +55,14 @@ const createUserToDB = async (payload: Partial<IUser>): Promise<IUser> => {
 
   await User.findOneAndUpdate(
     { _id: createUser._id },
-    { $set: { authentication } }
+    { $set: { authentication } },
   );
 
   return createUser;
 };
 
 const getUserProfileFromDB = async (
-  user: JwtPayload
+  user: JwtPayload,
 ): Promise<Partial<IUser>> => {
   const { id } = user;
   const isExistUser: any = await User.isExistUserById(id);
@@ -74,7 +74,7 @@ const getUserProfileFromDB = async (
 
 const updateProfileToDB = async (
   user: JwtPayload,
-  payload: Partial<IUser>
+  payload: Partial<IUser>,
 ): Promise<Partial<IUser | null>> => {
   const { id } = user;
   const isExistUser = await User.isExistUserById(id);

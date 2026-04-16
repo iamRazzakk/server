@@ -29,7 +29,7 @@ const loginUserFromDB = async (payload: ILoginData) => {
   if (!user.verified) {
     throw new ApiError(
       StatusCodes.BAD_REQUEST,
-      "Please verify your account first!"
+      "Please verify your account first!",
     );
   }
 
@@ -89,7 +89,7 @@ const verifyEmailToDB = async (payload: IVerifyEmail) => {
   if (!oneTimeCode) {
     throw new ApiError(
       StatusCodes.BAD_REQUEST,
-      "Please give the otp, check your email we send a code"
+      "Please give the otp, check your email we send a code",
     );
   }
 
@@ -101,7 +101,7 @@ const verifyEmailToDB = async (payload: IVerifyEmail) => {
   if (date > isExistUser.authentication?.expireAt) {
     throw new ApiError(
       StatusCodes.BAD_REQUEST,
-      "Otp already expired, Please try again"
+      "Otp already expired, Please try again",
     );
   }
 
@@ -111,7 +111,7 @@ const verifyEmailToDB = async (payload: IVerifyEmail) => {
   if (!isExistUser.verified) {
     await User.findOneAndUpdate(
       { _id: isExistUser._id },
-      { verified: true, authentication: { oneTimeCode: null, expireAt: null } }
+      { verified: true, authentication: { oneTimeCode: null, expireAt: null } },
     );
     message = "Email verify successfully";
   } else {
@@ -123,7 +123,7 @@ const verifyEmailToDB = async (payload: IVerifyEmail) => {
           oneTimeCode: null,
           expireAt: null,
         },
-      }
+      },
     );
 
     //create token ;
@@ -143,7 +143,7 @@ const verifyEmailToDB = async (payload: IVerifyEmail) => {
 //forget password
 const resetPasswordToDB = async (
   token: string,
-  payload: IAuthResetPassword
+  payload: IAuthResetPassword,
 ) => {
   const { newPassword, confirmPassword } = payload;
 
@@ -155,12 +155,12 @@ const resetPasswordToDB = async (
 
   //user permission check
   const isExistUser = await User.findById(isExistToken.user).select(
-    "+authentication"
+    "+authentication",
   );
   if (!isExistUser?.authentication?.isResetPassword) {
     throw new ApiError(
       StatusCodes.UNAUTHORIZED,
-      "You don't have permission to change the password. Please click again to 'Forgot Password'"
+      "You don't have permission to change the password. Please click again to 'Forgot Password'",
     );
   }
 
@@ -169,7 +169,7 @@ const resetPasswordToDB = async (
   if (!isValid) {
     throw new ApiError(
       StatusCodes.BAD_REQUEST,
-      "Token expired, Please click again to the forget password"
+      "Token expired, Please click again to the forget password",
     );
   }
 
@@ -177,13 +177,13 @@ const resetPasswordToDB = async (
   if (newPassword !== confirmPassword) {
     throw new ApiError(
       StatusCodes.BAD_REQUEST,
-      "New password and Confirm password doesn't match!"
+      "New password and Confirm password doesn't match!",
     );
   }
 
   const hashPassword = await bcrypt.hash(
     newPassword,
-    Number(config.bcrypt_salt_rounds)
+    Number(config.bcrypt_salt_rounds),
   );
 
   const updateData = {
@@ -200,7 +200,7 @@ const resetPasswordToDB = async (
 
 const changePasswordToDB = async (
   user: JwtPayload,
-  payload: IChangePassword
+  payload: IChangePassword,
 ) => {
   const { currentPassword, newPassword, confirmPassword } = payload;
   const isExistUser = await User.findById(user.id).select("+password");
@@ -220,7 +220,7 @@ const changePasswordToDB = async (
   if (currentPassword === newPassword) {
     throw new ApiError(
       StatusCodes.BAD_REQUEST,
-      "Please give different password from current password"
+      "Please give different password from current password",
     );
   }
 
@@ -228,14 +228,14 @@ const changePasswordToDB = async (
   if (newPassword !== confirmPassword) {
     throw new ApiError(
       StatusCodes.BAD_REQUEST,
-      "Password and Confirm password doesn't matched"
+      "Password and Confirm password doesn't matched",
     );
   }
 
   //hash password
   const hashPassword = await bcrypt.hash(
     newPassword,
-    Number(config.bcrypt_salt_rounds)
+    Number(config.bcrypt_salt_rounds),
   );
 
   const updateData = {
@@ -258,7 +258,7 @@ const newAccessTokenToUser = async (refreshToken: string) => {
   } catch (error) {
     throw new ApiError(
       StatusCodes.UNAUTHORIZED,
-      "Invalid or expired refresh token!"
+      "Invalid or expired refresh token!",
     );
   }
 
@@ -288,7 +288,7 @@ const resendVerificationEmailToDB = async (email: string) => {
   if (!existingUser) {
     throw new ApiError(
       StatusCodes.NOT_FOUND,
-      "User with this email does not exist!"
+      "User with this email does not exist!",
     );
   }
 
@@ -316,7 +316,7 @@ const resendVerificationEmailToDB = async (email: string) => {
   await User.findOneAndUpdate(
     { email: email },
     { $set: { authentication } },
-    { new: true }
+    { new: true },
   );
 };
 

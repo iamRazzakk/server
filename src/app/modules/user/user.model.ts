@@ -90,10 +90,10 @@ const userSchema = new Schema<IUser, UserModal>(
     versionKey: false,
     toJSON: { virtuals: true },
     toObject: { virtuals: true },
-  }
+  },
 );
 // for fast lookup
-userSchema.index({ email: 1 });
+// userSchema.index({ email: 1 });
 // if filtering by role often
 userSchema.index({ role: 1 });
 //exist user check
@@ -116,7 +116,7 @@ userSchema.statics.isAccountCreated = async (id: string) => {
 //is match password
 userSchema.statics.isMatchPassword = async (
   password: string,
-  hashPassword: string
+  hashPassword: string,
 ): Promise<boolean> => {
   return await bcrypt.compare(password, hashPassword);
 };
@@ -132,7 +132,7 @@ userSchema.pre("save", async function (next) {
   //password hash
   this.password = await bcrypt.hash(
     this.password,
-    Number(config.bcrypt_salt_rounds)
+    Number(config.bcrypt_salt_rounds),
   );
   next();
 });
@@ -142,7 +142,7 @@ userSchema.pre("insertMany", async function (next, docs: any[]) {
     if (doc.password) {
       doc.password = await bcrypt.hash(
         doc.password,
-        Number(config.bcrypt_salt_rounds)
+        Number(config.bcrypt_salt_rounds),
       );
     }
   }

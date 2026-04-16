@@ -1,8 +1,9 @@
 import Redis from "ioredis";
 import { logger, errorLogger } from "../shared/logger";
 import colors from "colors";
+import config from ".";
 
-const redisHost = process.env.REDIS_HOST || "localhost";
+const redisHost = config.bullMQ.host || "redis";
 const redisPort = process.env.REDIS_PORT || 6379;
 
 const redisClient = new Redis({
