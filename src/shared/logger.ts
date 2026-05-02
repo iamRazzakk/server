@@ -21,7 +21,7 @@ const myFormat = printf(({level, message, label, timestamp }: IMessageProps) => 
 
 
 const logger = createLogger({
-    level: 'info',
+    level: process.env.NODE_ENV === 'production' ? 'info' : (process.env.LOG_LEVEL || 'debug'),
     format: combine(label({ label: 'PROJECT_NAME' }), timestamp(), myFormat),
     transports: [
         new transports.Console(),

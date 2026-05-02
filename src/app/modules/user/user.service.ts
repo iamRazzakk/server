@@ -6,7 +6,9 @@ import { StatusCodes } from "http-status-codes";
 import ApiError from "../../../errors/ApiErrors";
 import generateOTP from "../../../util/generateOTP";
 import { emailTemplate } from "../../../shared/emailTemplate";
-import { emailHelper } from "../../../helpers/emailHelper";
+import { emailProducer } from "../../../services/email.producer";
+import { logger } from "../../../shared/logger";
+import { randomUUID } from "crypto";
 
 const createAdminToDB = async (payload: any): Promise<IUser> => {
   // check admin is exist or not;
@@ -44,9 +46,17 @@ const createUserToDB = async (payload: Partial<IUser>): Promise<IUser> => {
     email: createUser.email!,
   };
 
+  const emailJobId = randomUUID();
   const createAccountTemplate = emailTemplate.createAccount(values);
-  emailHelper.sendEmail(createAccountTemplate);
+  const emailData = {
+    jobId: emailJobId,
+    to: createAccountTemplate.to,
+    subject: createAccountTemplate.subject,
+    html: createAccountTemplate.html,
+    type: "create_account",
+  };
 
+  await emailProducer.sendEmailEvent(emailData);
   //save to DB
   const authentication = {
     oneTimeCode: otp,

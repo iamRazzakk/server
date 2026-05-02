@@ -55,4 +55,12 @@ export default {
     authToken: process.env.TWILIO_AUTH_TOKEN,
     twilioNumber: process.env.TWILIO_NUMBER,
   },
+
+  // rabbitmq
+  rabbitmq: {
+    url: process.env.RABBITMQ_URL!,
+    emailQueue: process.env.EMAIL_QUEUE!,
+    emailRetryQueue: process.env.EMAIL_RETRY_QUEUE!,
+    emailFailedQueue: process.env.EMAIL_FAILED_QUEUE!,
+  },
 };
