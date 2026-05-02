@@ -11,6 +11,8 @@ import "./worker/email.worker"; // Start BullMQ worker
 import "./config/redis.config";
 import { RedisClient } from "./config/redis.config";
 import { bootstrap } from "./handlers/rabbitmq.wrapper";
+import ApiError from "./errors/ApiErrors";
+import { StatusCodes } from "http-status-codes";
 
 //uncaught exception
 process.on("uncaughtException", (error) => {
@@ -27,7 +29,10 @@ async function main() {
 
     const redisConnected = await RedisClient.connect();
     if (!redisConnected) {
-      throw new Error("Redis connection failed");
+      throw new ApiError(
+        StatusCodes.INTERNAL_SERVER_ERROR,
+        "Redis connection failed",
+      );
     }
 
     await mongoose.connect(config.database_url as string);
