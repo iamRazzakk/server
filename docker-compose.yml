@@ -9,6 +9,7 @@ services:
     environment:
       - REDIS_HOST=redis
       - REDIS_PORT=6379
+      - DATABASE_URL=mongodb://mongodb:27017/backend_template
       - BULLMQIP=redis
       - BULLMQPORT=6379
       - MEILI_HOST=http://meilisearch:7700
@@ -26,7 +27,6 @@ services:
       - redisdata:/data
     restart: unless-stopped
 
-  # meilisearch
   meilisearch:
     image: getmeili/meilisearch:v1.2
     container_name: meilisearch-server
@@ -38,6 +38,30 @@ services:
       - meilisearchdata:/data
     restart: unless-stopped
 
+  rabbitmq:
+    image: rabbitmq:3-management
+    container_name: rabbitmq-server
+    ports:
+      - "5672:5672"
+      - "15672:15672"
+    environment:
+      RABBITMQ_DEFAULT_USER: admin
+      RABBITMQ_DEFAULT_PASS: admin
+    volumes:
+      - rabbitmqdata:/var/lib/rabbitmq
+    restart: unless-stopped
+
+  mongodb:
+    image: mongo:6
+    container_name: mongodb
+    ports:
+      - "27017:27017"
+    volumes:
+      - mongodata:/data/db
+    restart: unless-stopped
+
 volumes:
   redisdata:
   meilisearchdata:
+  mongodata:
+  rabbitmqdata:
