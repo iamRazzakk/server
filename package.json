@@ -58,7 +58,7 @@
     "morgan": "^1.10.0",
     "multer": "^2.0.2",
     "node-cron": "^3.0.3",
-    "nodemailer": "^8.0.5",
+    "nodemailer": "^9.0.1",
     "passport": "^0.7.0",
     "passport-facebook": "^3.0.0",
     "passport-google-oauth20": "^2.0.0",
