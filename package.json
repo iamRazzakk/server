@@ -3,9 +3,9 @@
   "version": "1.0.0",
   "main": "app.ts",
   "scripts": {
-    "dev": "node api.js && ts-node-dev --respawn --transpile-only src/server.ts",
-    "start": "node api.js && node dist/server.js",
-    "build": "node api.js && tsc",
+    "dev": "node init && ts-node-dev --respawn --transpile-only src/server.ts",
+    "start": "node init && node dist/server.js",
+    "build": "node init && tsc",
     "test": "jest",
     "test:watch": "jest --watch"
   },
